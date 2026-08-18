@@ -30,6 +30,14 @@ repositories {
         }
         filter { includeGroup "maven.modrinth" }
     }
+    exclusiveContent {
+        forRepository {
+            maven { url = "https://maven.ryanhcode.dev/releases" }
+        }
+        filter {
+            includeGroup("dev.ryanhcode.sable-companion")
+        }
+    }
 }
 
 base {
@@ -88,13 +96,13 @@ configurations {
 
 dependencies {
     compileOnly files("libs/sable.jar")
-    compileOnly files("libs/sable-companion.jar")
     compileOnly files("libs/create.jar")
     compileOnly files("libs/create-aeronautics.jar")
     compileOnly "maven.modrinth:GwtIopV4:8pMPZhvI"
     compileOnly "maven.modrinth:GWp4jCJj:bsGaXKEd" // Create Big Cannons 5.11.3
-
-//    compileOnly "maven.modrinth:T9PomCSv:3FMsUjO4"
+    jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:[${project.sable_companion_version},)")) {
+        version {prefer(project.sable_companion_version)}
+    }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
