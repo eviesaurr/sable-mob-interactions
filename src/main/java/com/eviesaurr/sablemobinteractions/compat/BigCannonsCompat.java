@@ -14,7 +14,6 @@ public class BigCannonsCompat {
         return ModList.get().isLoaded(MOD_ID);
     }
 
-    /** Returns a hit-count multiplier reflecting Big Cannons' hardness+toughness for this block, or 1.0 if not present/not loaded. */
     public static double getHitMultiplier(ServerLevel level, BlockState state, BlockPos pos) {
         var properties = BlockArmorPropertiesHandler.getProperties(state);
         double hardness = properties.hardness(level, state, pos, false);
