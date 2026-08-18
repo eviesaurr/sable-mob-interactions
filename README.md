@@ -1,4 +1,4 @@
-# ⚔️ Sable Mob Interactions
+# Sable Mob Interactions
 ### *Give Any Mob a Reason to Attack Your Ships*
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/eviesaurr/sable-mob-interactions)

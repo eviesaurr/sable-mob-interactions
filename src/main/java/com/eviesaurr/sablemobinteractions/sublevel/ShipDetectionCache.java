@@ -42,7 +42,6 @@ public class ShipDetectionCache {
         return false;
     }
 
-    /** Call when a sub-level is removed, to avoid leaking stale cache entries. */
     public static void clearSubLevel(UUID subLevelId) {
         cache.remove(subLevelId);
     }
