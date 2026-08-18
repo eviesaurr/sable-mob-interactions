@@ -9,12 +9,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Caches whether a sub-level contains any ship-essential block (per the
- * ship_essential_blocks tag), so mobs only target genuine vehicles, not
- * arbitrary player-built sub-levels. Recomputed periodically rather than
- * every poll, since a sub-level's composition rarely changes tick-to-tick.
- */
 public class ShipDetectionCache {
 
     private static final int LIFETIME_TICKS = 200; // ~10 seconds
