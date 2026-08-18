@@ -1,0 +1,27 @@
+{
+  "values": [
+    "aeronautics:propeller_bearing",
+    "aeronautics:gyroscopic_propeller_bearing",
+    "aeronautics:smart_propeller",
+    "aeronautics:andesite_propeller",
+    "aeronautics:wooden_propeller",
+    "aeronautics:adjustable_burner",
+    "aeronautics:steam_vent",
+    "aeronautics:levitite",
+    "aeronautics:pearlescent_levitite",
+
+    "offroad:wheel_mount",
+
+    "tracks:track_mount",
+    "tracks:track_drive_wheel",
+    "tracks:small_track_drive_wheel",
+    "tracks:large_track_drive_wheel",
+
+    "create_submarine:water_thruster",
+    "create_submarine:submarine_propeller",
+    "create_submarine:ballast_tank",
+    "create_submarine:oxygene_diffuser"
+
+
+  ]
+}

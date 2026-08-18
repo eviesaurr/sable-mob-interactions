@@ -1,0 +1,41 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "All Rights Reserved"
+issueTrackerURL = "https://github.com/eviesaurr/sable-mob-interactions/issues"
+
+[[mods]]
+modId = "sablemobinteractions"
+version = "${file.jarVersion}"
+displayName = "Sable Mob Interactions"
+authors = "eviesaurr"
+description = '''
+Lets vanilla and custom Minecraft mobs target, and damage Sable sub-levels.
+'''
+
+[[dependencies.sablemobinteractions]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.22)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "sable"
+type = "required"
+versionRange = "[1.2.2,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "createbigcannons"
+type = "optional"
+versionRange = "[5.11.0,)"
+ordering = "AFTER"
+side = "BOTH"

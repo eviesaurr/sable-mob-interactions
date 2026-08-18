@@ -1,0 +1,31 @@
+{
+  "sablemobinteractions.configuration.title": "Sable Mob Interactions Configuration",
+
+  "sablemobinteractions.configuration.general": "General",
+  "sablemobinteractions.configuration.general.playerPresenceRange": "Player Presence Range",
+  "sablemobinteractions.configuration.general.requireShipEssentialBlocks": "Require Ship-Essential Blocks",
+
+  "sablemobinteractions.configuration.enderman_steal": "Enderman Stealing (Not implemented)",
+  "sablemobinteractions.configuration.enderman_steal.allowedModNamespaces": "Allowed Mod Namespaces",
+  "sablemobinteractions.configuration.enderman_steal.allowStealing": "Allow Enderman Stealing  (Not implemented)",
+
+  "sablemobinteractions.configuration.zombie": "Zombie",
+  "sablemobinteractions.configuration.zombie.searchRadius": "Search Radius",
+  "sablemobinteractions.configuration.zombie.attackRange": "Attack Range",
+
+  "sablemobinteractions.configuration.skeleton": "Skeleton",
+  "sablemobinteractions.configuration.skeleton.searchRadius": "Search Radius",
+  "sablemobinteractions.configuration.skeleton.attackRange": "Attack Range",
+  "sablemobinteractions.configuration.skeleton.fireCooldownTicks": "Fire Cooldown (Ticks)",
+
+  "sablemobinteractions.configuration.creeper": "Creeper",
+  "sablemobinteractions.configuration.creeper.allowGriefing": "Allow Creeper Griefing",
+
+  "sablemobinteractions.configuration.generic_monster": "Generic Monster",
+  "sablemobinteractions.configuration.generic_monster.searchRadius": "Search Radius",
+  "sablemobinteractions.configuration.generic_monster.attackRange": "Attack Range",
+
+  "sablemobinteractions.configuration.block_breaking": "Block Breaking",
+  "sablemobinteractions.configuration.block_breaking.baseHitsToBreak": "Base Hits To Break",
+  "sablemobinteractions.configuration.block_breaking.scaleHitsByHardness": "Scale Hits By Hardness (Big Cannons)"
+}
