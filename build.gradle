@@ -95,10 +95,8 @@ configurations {
 }
 
 dependencies {
-    compileOnly files("libs/sable.jar")
-    compileOnly files("libs/create.jar")
-    compileOnly files("libs/create-aeronautics.jar")
-    compileOnly "maven.modrinth:GwtIopV4:8pMPZhvI"
+    compileOnly "maven.modrinth:T9PomCSv:3FMsUjO4" // Sable
+    compileOnly "maven.modrinth:GwtIopV4:8pMPZhvI" // Scorched Guns
     compileOnly "maven.modrinth:GWp4jCJj:bsGaXKEd" // Create Big Cannons 5.11.3
     jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:[${project.sable_companion_version},)")) {
         version {prefer(project.sable_companion_version)}
