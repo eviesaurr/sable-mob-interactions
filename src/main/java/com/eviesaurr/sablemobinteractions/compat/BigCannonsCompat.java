@@ -16,8 +16,14 @@ public class BigCannonsCompat {
 
     public static double getHitMultiplier(ServerLevel level, BlockState state, BlockPos pos) {
         var properties = BlockArmorPropertiesHandler.getProperties(state);
+        long start = System.nanoTime();
         double hardness = properties.hardness(level, state, pos, false);
         double toughness = properties.toughness(level, state, pos, false);
-        return 1.0 + hardness + toughness; // tune this formula to taste
+        long elapsedMicros = (System.nanoTime() - start) / 1000;
+        if (elapsedMicros > 500) {
+            com.eviesaurr.sablemobinteractions.SableMobInteractions.LOGGER.warn(
+                    "[PERF] hardness/toughness lookup for {} took {}µs", state.getBlock(), elapsedMicros);
+        }
+        return 1.0 + hardness + toughness;
     }
 }

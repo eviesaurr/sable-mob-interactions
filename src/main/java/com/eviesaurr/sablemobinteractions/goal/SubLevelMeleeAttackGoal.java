@@ -104,10 +104,12 @@ public class SubLevelMeleeAttackGoal extends Goal {
 
         this.attackCooldown = 10;
         this.mob.swing(InteractionHand.MAIN_HAND);
-        if (BlockBreakTracker.registerHit(this.targetSubLevel, this.targetLocalPos, this.mob)) {
+        if (BlockBreakTracker.registerHit(this.targetSubLevel, this.targetLocalPos, this.mob).broke()) {
             this.targetSubLevel = null;
             this.targetLocalPos = null;
         }
+
+
     }
 
     private void retargetIfBetterOptionExists() {

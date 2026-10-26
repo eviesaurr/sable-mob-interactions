@@ -118,7 +118,7 @@ public class SubLevelGuardianAttackGoal extends Goal {
 
         if (this.chargeTicks >= CHARGE_TICKS) {
             this.chargeTicks = 0;
-            if (BlockBreakTracker.registerHit(this.targetSubLevel, this.targetLocalPos, this.guardian)) {
+            if (BlockBreakTracker.registerHit(this.targetSubLevel, this.targetLocalPos, this.guardian).broke()) {
                 this.targetSubLevel = null;
                 this.targetLocalPos = null;
             }

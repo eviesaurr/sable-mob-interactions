@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "sablemobinteractions:vehicle_node_boss",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 20,
+    "salt": 949949
+  }
+}

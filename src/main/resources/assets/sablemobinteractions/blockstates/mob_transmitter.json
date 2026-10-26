@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=south": { "model": "sablemobinteractions:block/mob_transmitter" },
+    "facing=west":  { "model": "sablemobinteractions:block/mob_transmitter", "y": 90 },
+    "facing=north": { "model": "sablemobinteractions:block/mob_transmitter", "y": 180 },
+    "facing=east":  { "model": "sablemobinteractions:block/mob_transmitter", "y": 270 }
+  }
+}

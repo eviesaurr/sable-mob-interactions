@@ -1,0 +1,8 @@
+{
+  "type": "sablemobinteractions:vehicle_node",
+  "biomes": "#sablemobinteractions:vehicle_node_biomes",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "tier": "sablemobinteractions:tier_3_uncommon"
+}

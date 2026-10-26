@@ -1,0 +1,67 @@
+{
+  "min_radius": 4500,
+  "max_radius": 9000,
+  "site_spacing": 2500,
+  "site_chance": 0.35,
+  "cars_per_site": 2,
+  "site_radius": 30,
+  "min_spacing": 8,
+  "placement": "terrain",
+  "despawn_after_ticks": 0,
+  "max_speed": 70,
+  "structures": [
+    "sablemobinteractions:vehicles/car_only_glorp_rlink2",
+    "sablemobinteractions:vehicles/scrappy_default_car"
+  ],
+  "pilots": [
+    {
+      "entity": "minecraft:evoker",
+      "weight": 40
+    },
+    {
+      "entity": "minecraft:wither_skeleton",
+      "weight": 35
+    },
+    {
+      "entity": "minecraft:vindicator",
+      "weight": 25
+    },
+    {
+      "entity": "minecraft:chicken",
+      "weight": 1
+    }
+  ],
+  "goals": [
+    {
+      "type": "chase",
+      "range": 128,
+      "orbit_distance": 10,
+      "collision_margin": 2.5
+    },
+    {
+      "type": "avoid",
+      "reach": 14,
+      "speed_reach": 20,
+      "avoid_players": true,
+      "player_margin": 1.5
+    },
+    {
+      "type": "avoid_water"
+    },
+    {
+      "type": "avoid_cliffs"
+    },
+    {
+      "type": "slow_turn"
+    },
+    {
+      "type": "stay_upright"
+    },
+    {
+      "type": "unstick",
+      "stuck_ticks": 80,
+      "reverse_ticks": 40,
+      "min_progress": 1.0
+    }
+  ]
+}

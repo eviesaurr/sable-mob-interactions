@@ -23,11 +23,11 @@ public class Config {
 
     public static final ModConfigSpec.BooleanValue ALLOW_ENDERMAN_STEALING;
 
+    public static final ModConfigSpec.BooleanValue ALLOW_MOB_VEHICLE_PILOTING;
+
     public static final ModConfigSpec.BooleanValue SCALE_HITS_BY_HARDNESS;
     public static final ModConfigSpec.IntValue BASE_HITS_TO_BREAK;
     public static final ModConfigSpec.DoubleValue PLAYER_PRESENCE_RANGE;
-    public static final ModConfigSpec.BooleanValue REQUIRE_SHIP_ESSENTIAL_BLOCKS;
-
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
@@ -89,6 +89,14 @@ public class Config {
                 .defineList("allowedModNamespaces", () -> List.of("create_aeronautics"), o -> o instanceof String);
         builder.pop();
 
+        builder.push("mob_vehicle_piloting");
+        builder.translation("sablemobinteractions.configuration.mob_vehicle_piloting");
+        ALLOW_MOB_VEHICLE_PILOTING = builder
+                .translation("sablemobinteractions.configuration.mob_vehicle_piloting.allowPiloting")
+                .comment("If true, mobs seated in a MobPilotSeatEntity will wander/steer the vehicle on their own. Turn off if you only want player-driven vehicles.")
+                .define("allowPiloting", true);
+        builder.pop();
+
         builder.push("block_breaking");
 
         builder.translation("sablemobinteractions.configuration.block_breaking");
@@ -109,11 +117,7 @@ public class Config {
         PLAYER_PRESENCE_RANGE = builder
                 .translation("sablemobinteractions.configuration.general.playerPresenceRange")
                 .comment("A sub-level is only a valid target if a player is within this many blocks of it. Set to 0 to disable this check entirely.")
-                .defineInRange("playerPresenceRange", 15.0, 0.0, 512.0);
-        REQUIRE_SHIP_ESSENTIAL_BLOCKS = builder
-                .translation("sablemobinteractions.configuration.general.requireShipEssentialBlocks")
-                .comment("If true, a sub-level must contain at least one block from the ship_essential_blocks tag (see ship_essential_blocks.json) to be a valid target. Turn off if you only use base Sable without ship-part mods like Aeronautics, Track-work or Submarine, so any sub-level can be targeted.")
-                .define("requireShipEssentialBlocks", true);
+                .defineInRange("playerPresenceRange", 5.0, 0.0, 512.0);
         builder.pop();
 
         SPEC = builder.build();

@@ -1,12 +1,14 @@
 package com.eviesaurr.sablemobinteractions;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ZombieRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -22,5 +24,10 @@ public class SableMobInteractionsClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         SableMobInteractions.LOGGER.info("Sable Mob Interactions client setup complete");
+    }
+
+    @SubscribeEvent
+    static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntityTypes.SUBLEVEL_PILOT_ZOMBIE.get(), ZombieRenderer::new);
     }
 }

@@ -39,3 +39,31 @@ type = "optional"
 versionRange = "[5.11.0,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId="create"
+type="required"
+versionRange="[6.0.10,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId="drivebywire"
+type="required"
+versionRange="[0.2.9,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId="simulated"
+type="required"
+versionRange="[1.3.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "sablecat"
+type = "required"
+versionRange = "[1.0.3,)"
+ordering = "NONE"
+side = "BOTH"

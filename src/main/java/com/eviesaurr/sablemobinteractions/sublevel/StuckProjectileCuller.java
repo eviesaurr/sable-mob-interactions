@@ -11,7 +11,7 @@ import java.util.WeakHashMap;
 @EventBusSubscriber(modid = "sablemobinteractions")
 public class StuckProjectileCuller {
 
-    private static final int LIFETIME_TICKS = 100;
+    private static final int LIFETIME_TICKS = 1;
 
     private static final Map<Entity, Integer> tracked = new WeakHashMap<>();
 

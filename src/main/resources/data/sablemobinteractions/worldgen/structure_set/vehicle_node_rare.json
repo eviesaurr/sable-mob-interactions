@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "sablemobinteractions:vehicle_node_rare",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 44,
+    "separation": 14,
+    "salt": 942030
+  }
+}

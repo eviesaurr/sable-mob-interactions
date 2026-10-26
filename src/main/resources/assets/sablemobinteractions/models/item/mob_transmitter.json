@@ -1,0 +1,15 @@
+{
+  "parent": "sablemobinteractions:block/mob_transmitter",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [0, 145, 0],
+      "translation": [-2.8, 2.45, -0.875],
+      "scale": [0.35, 0.35, 0.35]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 145, 0],
+      "translation": [-2.8, 2.45, -0.875],
+      "scale": [0.35, 0.35, 0.35]
+    }
+  }
+}

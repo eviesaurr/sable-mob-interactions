@@ -1,6 +1,7 @@
 package com.eviesaurr.sablemobinteractions.goal;
 
 // import com.eviesaurr.sablemobinteractions.SableMobInteractions;
+import com.eviesaurr.sablemobinteractions.SableMobInteractions;
 import com.eviesaurr.sablemobinteractions.sublevel.NearestBlockCache;
 import com.eviesaurr.sablemobinteractions.sublevel.SubLevelInteraction;
 import dev.ryanhcode.sable.sublevel.SubLevel;
@@ -120,7 +121,7 @@ public class SubLevelRangedAttackGoal extends Goal {
         this.mob.swing(InteractionHand.MAIN_HAND);
 
         // debug: check before firing:
-//        SableMobInteractions.LOGGER.info("Aiming at targetLocalPos={}", this.targetLocalPos);
+        SableMobInteractions.LOGGER.info("Aiming at targetLocalPos={}", this.targetLocalPos);
 
         AbstractArrow arrow = new Arrow(level, this.mob, new ItemStack(Items.ARROW), null);
         arrow.setPos(this.mob.getX(), this.mob.getEyeY() - 0.1, this.mob.getZ());
@@ -131,7 +132,7 @@ public class SubLevelRangedAttackGoal extends Goal {
 
         arrow.shoot(dx, dy, dz, ARROW_VELOCITY, ARROW_INACCURACY);
 
-//        SableMobInteractions.LOGGER.info("Skeleton firing arrow toward {}", targetPos);
+        SableMobInteractions.LOGGER.info("Skeleton firing arrow toward {}", targetPos);
         level.addFreshEntity(arrow);
     }
 

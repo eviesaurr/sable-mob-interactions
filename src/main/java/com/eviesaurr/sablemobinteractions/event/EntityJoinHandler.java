@@ -18,6 +18,8 @@ public class EntityJoinHandler {
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (event.getLevel().isClientSide()) return;
 
+        if (event.getEntity() instanceof com.eviesaurr.sablemobinteractions.entity.SubLevelPilotZombie) return;
+
         if (event.getEntity() instanceof com.eviesaurr.sablemobinteractions.api.SubLevelAttacker attacker
                 && event.getEntity() instanceof Mob mob) {
             mob.goalSelector.addGoal(2, new SubLevelCustomAttackerGoal(mob, attacker, Config.GENERIC_MONSTER_SEARCH_RADIUS.get()));
@@ -26,8 +28,9 @@ public class EntityJoinHandler {
                     Config.SKELETON_SEARCH_RADIUS.get(), Config.SKELETON_ATTACK_RANGE.get(), Config.SKELETON_FIRE_COOLDOWN_TICKS.get()));
         } else if (event.getEntity() instanceof EnderMan enderman) {
             if (Config.ALLOW_ENDERMAN_STEALING.get()) {
-            enderman.goalSelector.addGoal(3, new SubLevelMeleeAttackGoal(enderman,
-                    Config.GENERIC_MONSTER_SEARCH_RADIUS.get(), Config.ZOMBIE_ATTACK_RANGE.get()));
+                enderman.goalSelector.addGoal(3, new SubLevelMeleeAttackGoal(enderman,
+                        Config.GENERIC_MONSTER_SEARCH_RADIUS.get(), Config.ZOMBIE_ATTACK_RANGE.get()));
+            }
         } else if (event.getEntity() instanceof Creeper creeper) {
             if (Config.ALLOW_CREEPER_GRIEFING.get()) {
                 creeper.goalSelector.addGoal(2, new SubLevelCreeperExplodeGoal(creeper,
@@ -51,6 +54,6 @@ public class EntityJoinHandler {
             monster.goalSelector.addGoal(2, new SubLevelNativeTargetGoal(monster,
                     Config.GENERIC_MONSTER_SEARCH_RADIUS.get()));
         }
+
     }
-}
 }

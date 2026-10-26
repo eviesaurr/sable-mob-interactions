@@ -1,6 +1,5 @@
 package com.eviesaurr.sablemobinteractions.sublevel;
 
-import com.eviesaurr.sablemobinteractions.config.Config;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.api.sublevel.SubLevelContainer;
 import dev.ryanhcode.sable.companion.math.BoundingBox3d;
@@ -92,7 +91,9 @@ public class SubLevelInteraction {
 
     public static Optional<Found> findNearestBlock(ServerLevel level, Vec3 worldPos, double radius) {
         var container = SubLevelContainer.getContainer(level);
-        if (container == null) return Optional.empty();
+        if (container == null) {
+            return Optional.empty();
+        }
 
         var searchBox = new BoundingBox3d(
                 worldPos.x - radius, worldPos.y - radius, worldPos.z - radius,
@@ -104,9 +105,13 @@ public class SubLevelInteraction {
         double nearestDistSqr = radius * radius;
 
         for (SubLevel subLevel : container.queryIntersecting(searchBox)) {
-            if (Config.REQUIRE_SHIP_ESSENTIAL_BLOCKS.get()
-                    && !ShipDetectionCache.isShip(level, subLevel, level.getGameTime())) continue;
-            if (!NearbyPlayerCache.hasNearbyPlayer(level, subLevel, level.getGameTime())) continue;
+            // Ship-essential-blocks gating removed: every sub-level is now a valid target,
+            // gated purely by whether a player is actually close enough to care (see
+            // NearbyPlayerCache / PLAYER_PRESENCE_RANGE, adjustable in config without a rebuild).
+            if (!NearbyPlayerCache.hasNearbyPlayer(level, subLevel, level.getGameTime())) {
+                continue;
+            }
+
             for (var holder : subLevel.getPlot().getLoadedChunks()) {
                 var chunk = holder.getChunk();
                 if (chunk == null) continue;

@@ -27,5 +27,7 @@
 
   "sablemobinteractions.configuration.block_breaking": "Block Breaking",
   "sablemobinteractions.configuration.block_breaking.baseHitsToBreak": "Base Hits To Break",
-  "sablemobinteractions.configuration.block_breaking.scaleHitsByHardness": "Scale Hits By Hardness (Big Cannons)"
+  "sablemobinteractions.configuration.block_breaking.scaleHitsByHardness": "Scale Hits By Hardness (Big Cannons)",
+
+  "item.sablemobinteractions.mob_transmitter": "Mob Transmitter"
 }
