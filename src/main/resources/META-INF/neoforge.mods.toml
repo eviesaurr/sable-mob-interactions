@@ -67,3 +67,17 @@ type = "required"
 versionRange = "[1.0.3,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "create_connected"
+type = "required"
+versionRange = "[1.3.2,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.sablemobinteractions]]
+modId = "offroad"
+type = "required"
+versionRange = "[1.3.0,)"
+ordering = "NONE"
+side = "BOTH"

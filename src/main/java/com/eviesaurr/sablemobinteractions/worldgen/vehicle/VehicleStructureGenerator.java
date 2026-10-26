@@ -14,7 +14,7 @@ import com.simibubi.create.content.contraptions.actors.seat.SeatBlock;
 import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer;
 import dev.ryanhcode.sable.sublevel.SubLevel;
-import dev.simulated_team.simulated.content.blocks.physics_assembler.PhysicsAssemblerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -192,9 +192,10 @@ public class VehicleStructureGenerator {
             BlockPos from = vehicle.pos;
             BlockPos to = vehicle.pos.offset(vehicle.sizeX - 1, vehicle.sizeY - 1, vehicle.sizeZ - 1);
 
-            PhysicsAssemblerBlockEntity assembler = null;
+            BlockEntity assembler = null;
             for (BlockPos scan : BlockPos.betweenClosed(from, to)) {
-                if (level.getBlockEntity(scan) instanceof PhysicsAssemblerBlockEntity candidate) {
+                BlockEntity candidate = level.getBlockEntity(scan);
+                if (candidate != null && ASSEMBLER_CLASS != null && ASSEMBLER_CLASS.isInstance(candidate)) {
                     assembler = candidate;
                     break;
                 }
@@ -202,7 +203,11 @@ public class VehicleStructureGenerator {
 
             vehicle.assembleAttempts++;
             if (assembler != null) {
-                assembler.assembleOrDisassemble();
+                try {
+                    ASSEMBLE_METHOD.invoke(assembler);
+                } catch (Throwable t) {
+                    SableMobInteractions.LOGGER.warn("Could not trigger the physics assembler at {}", assembler.getBlockPos(), t);
+                }
             }
             if (vehicle.assembleAttempts >= MAX_ASSEMBLE_ATTEMPTS) {
                 SableMobInteractions.LOGGER.warn(
@@ -681,12 +686,57 @@ public class VehicleStructureGenerator {
             }
         }
 
+        if (!isClearOfBlocks(level, box)) {
+            return false;
+        }
+
         structureTemplate.placeInWorld(level, placePos, placePos, settings, level.getRandom(), 2);
 
         data.active.add(new VehicleSpawnData.ActiveVehicle(pending.tier, structureId, pending.key,
                 new BlockPos(box.minX(), box.minY(), box.minZ()),
                 box.getXSpan(), box.getYSpan(), box.getZSpan(), false, 0, null, 0));
         data.setDirty();
+        return true;
+    }
+
+    private static final int SPAWN_MARGIN = 2;
+
+    private static final Class<?> ASSEMBLER_CLASS;
+    private static final java.lang.reflect.Method ASSEMBLE_METHOD;
+
+    static {
+        Class<?> assemblerClass = null;
+        java.lang.reflect.Method assembleMethod = null;
+        try {
+            assemblerClass = Class.forName("dev.simulated_team.simulated.content.blocks.physics_assembler.PhysicsAssemblerBlockEntity");
+            assembleMethod = assemblerClass.getMethod("assembleOrDisassemble");
+        } catch (Throwable t) {
+            SableMobInteractions.LOGGER.warn("Physics assembler class not found, vehicles will not assemble", t);
+            assemblerClass = null;
+        }
+        ASSEMBLER_CLASS = assemblerClass;
+        ASSEMBLE_METHOD = assembleMethod;
+    }
+
+    private static boolean isClearOfBlocks(ServerLevel level, BoundingBox box) {
+        for (int cx = (box.minX() - SPAWN_MARGIN) >> 4; cx <= (box.maxX() + SPAWN_MARGIN) >> 4; cx++) {
+            for (int cz = (box.minZ() - SPAWN_MARGIN) >> 4; cz <= (box.maxZ() + SPAWN_MARGIN) >> 4; cz++) {
+                if (!level.hasChunk(cx, cz)) {
+                    return false;
+                }
+            }
+        }
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+        for (int x = box.minX() - SPAWN_MARGIN; x <= box.maxX() + SPAWN_MARGIN; x++) {
+            for (int z = box.minZ() - SPAWN_MARGIN; z <= box.maxZ() + SPAWN_MARGIN; z++) {
+                for (int y = box.minY(); y <= box.maxY(); y++) {
+                    var state = level.getBlockState(cursor.set(x, y, z));
+                    if (!state.isAir() && !state.canBeReplaced()) {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 
