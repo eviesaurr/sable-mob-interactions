@@ -10,6 +10,7 @@
 
 ## Table of Contents
 - [Overview](#overview)
+- [Car building tutorial](docs/TUTORIAL.md)
 - [Features at a Glance](#features-at-a-glance)
 - [How It Works](#how-it-works)
 - [Mob-Driven Vehicles](#mob-driven-vehicles)
