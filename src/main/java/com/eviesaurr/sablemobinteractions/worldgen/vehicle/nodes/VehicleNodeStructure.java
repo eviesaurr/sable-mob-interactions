@@ -1,6 +1,7 @@
 package com.eviesaurr.sablemobinteractions.worldgen.vehicle.nodes;
 
 import com.eviesaurr.sablemobinteractions.SableMobInteractions;
+import com.eviesaurr.sablemobinteractions.worldgen.vehicle.ForcedNodePlacement;
 import com.eviesaurr.sablemobinteractions.worldgen.vehicle.VehicleTier;
 import com.eviesaurr.sablemobinteractions.worldgen.vehicle.VehicleTierManager;
 import com.mojang.serialization.Codec;
@@ -52,13 +53,22 @@ public class VehicleNodeStructure extends Structure {
     }
 
     @Override
+    public Optional<GenerationStub> findValidGenerationPoint(GenerationContext context) {
+        if (ForcedNodePlacement.isForced()) {
+            return findGenerationPoint(context);
+        }
+        return super.findValidGenerationPoint(context);
+    }
+
+    @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         if (templates.isEmpty()) {
             return reject("no templates");
         }
+        boolean forced = ForcedNodePlacement.isForced();
         ChunkPos chunkPos = context.chunkPos();
         VehicleTier tierSettings = VehicleTierManager.getTiers().get(tier);
-        if (tierSettings != null) {
+        if (tierSettings != null && !forced) {
             double distance = Math.hypot(chunkPos.getMiddleBlockX(), chunkPos.getMiddleBlockZ());
             if (distance < tierSettings.minRadius() || distance > tierSettings.maxRadius()) {
                 return reject("outside ring " + tierSettings.minRadius() + "-" + tierSettings.maxRadius() + " at distance " + (int) distance);
@@ -68,7 +78,7 @@ public class VehicleNodeStructure extends Structure {
         int centerZ = chunkPos.getMiddleBlockZ();
         int height = context.chunkGenerator().getFirstOccupiedHeight(centerX, centerZ,
                 Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-        if (height <= context.chunkGenerator().getSeaLevel()) {
+        if (!forced && height <= context.chunkGenerator().getSeaLevel()) {
             return reject("surface " + height + " is at or below sea level " + context.chunkGenerator().getSeaLevel());
         }
 
@@ -91,10 +101,10 @@ public class VehicleNodeStructure extends Structure {
                 highest = Math.max(highest, sample);
             }
         }
-        if (highest - lowest > maxHeightVariation) {
+        if (!forced && highest - lowest > maxHeightVariation) {
             return reject("terrain not flat, variation " + (highest - lowest) + " over " + (halfExtent * 2 + 1) + " blocks");
         }
-        if (lowest <= context.chunkGenerator().getSeaLevel()) {
+        if (!forced && lowest <= context.chunkGenerator().getSeaLevel()) {
             return reject("footprint reaches sea level " + context.chunkGenerator().getSeaLevel());
         }
         height = (int) Math.round((double) total / Math.max(1, samples));

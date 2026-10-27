@@ -55,15 +55,17 @@ import java.util.Set;
 @EventBusSubscriber(modid = SableMobInteractions.MOD_ID)
 public class VehicleStructureGenerator {
 
-    private static final int TICK_INTERVAL = 100;
+    private static final int TICK_INTERVAL = 20;
+    private static final int MAINTAIN_EVERY = 2;
+    private static final int MAX_ATTEMPTS_PER_PASS = 16;
     private static final int DESPAWN_RANGE = 128;
-    private static final int MISSING_PASSES_BEFORE_REMOVAL = 4;
+    private static final int MISSING_PASSES_BEFORE_REMOVAL = 10;
     private static final float WRECK_BREAK_CHANCE = 0.4f;
     private static final int ACTIVATION_RANGE = 80;
     private static final int MAX_SPAWNS_PER_PASS = 3;
-    private static final int MAX_ASSEMBLE_ATTEMPTS = 10;
-    private static final int MAX_PILOT_ATTEMPTS = 5;
-    private static final int PILOT_LOST_PASSES = 4;
+    private static final int MAX_ASSEMBLE_ATTEMPTS = 30;
+    private static final int MAX_PILOT_ATTEMPTS = 12;
+    private static final int PILOT_LOST_PASSES = 10;
 
     public static int[] clearRecords(ServerLevel level) {
         VehicleSpawnData data = VehicleSpawnData.get(level);
@@ -135,6 +137,7 @@ public class VehicleStructureGenerator {
     }
 
     private static int tickCounter = 0;
+    private static int passCounter = 0;
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
@@ -143,13 +146,17 @@ public class VehicleStructureGenerator {
             return;
         }
         tickCounter = 0;
+        passCounter++;
+        boolean slowPass = passCounter % MAINTAIN_EVERY == 0;
 
         MinecraftServer server = event.getServer();
         for (ServerLevel level : server.getAllLevels()) {
             VehicleSpawnData data = VehicleSpawnData.get(level);
             assembleAndResolvePending(level, data);
-            CustomCars.refreshIfChanged(level.getServer(), VehicleTierManager.getTiers().keySet());
-            maintainVehicles(level, data);
+            if (slowPass) {
+                CustomCars.refreshIfChanged(level.getServer(), VehicleTierManager.getTiers().keySet());
+                maintainVehicles(level, data);
+            }
             populateSites(level, data);
         }
     }
@@ -544,6 +551,7 @@ public class VehicleStructureGenerator {
         }
 
         int budget = MAX_SPAWNS_PER_PASS;
+        int attempts = MAX_ATTEMPTS_PER_PASS;
         Iterator<VehicleSpawnData.PendingSite> iterator = data.pending.values().iterator();
         while (iterator.hasNext()) {
             VehicleSpawnData.PendingSite pending = iterator.next();
@@ -563,9 +571,10 @@ public class VehicleStructureGenerator {
                 continue;
             }
 
-            while (pending.remaining > 0 && budget > 0) {
-                budget--;
+            while (pending.remaining > 0 && budget > 0 && attempts > 0) {
+                attempts--;
                 if (spawnCar(level, data, pending, tier, site.get())) {
+                    budget--;
                     pending.remaining--;
                     data.setDirty();
                 }
@@ -634,10 +643,11 @@ public class VehicleStructureGenerator {
             return false;
         }
         ResourceLocation structureId = pool.get(random.nextInt(pool.size()));
-        if (CustomCars.get(structureId) != null) {
-            SableMobInteractions.LOGGER.info("Spawning custom car {}", structureId);
+        boolean placed = place(level, data, pending, tier, structureId, x, z);
+        if (placed) {
+            SableMobInteractions.LOGGER.debug("Placed car {} at {} {}", structureId, x, z);
         }
-        return place(level, data, pending, tier, structureId, x, z);
+        return placed;
     }
 
     private static boolean place(ServerLevel level, VehicleSpawnData data, VehicleSpawnData.PendingSite pending,

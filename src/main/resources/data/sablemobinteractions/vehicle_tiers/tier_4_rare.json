@@ -9,10 +9,7 @@
   "placement": "terrain",
   "despawn_after_ticks": 0,
   "max_speed": 55,
-  "structures": [
-    "sablemobinteractions:vehicles/car_only_glorp_rlink2",
-    "sablemobinteractions:vehicles/scrappy_default_car"
-  ],
+  "structures": [],
   "pilots": [
     {
       "entity": "minecraft:vindicator",

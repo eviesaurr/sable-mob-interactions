@@ -8,19 +8,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public final class CustomCars {
 
     private static final String PREFIX = "custom/";
+    private static final String DEFAULTS_ROOT = "/data/sablemobinteractions/default_cars/";
+    private static final String DEFAULTS_MARKER = ".defaults_installed";
 
     private static volatile Map<ResourceLocation, CompoundTag> cars = Map.of();
     private static volatile Map<String, List<ResourceLocation>> byFolder = Map.of();
@@ -117,7 +126,8 @@ public final class CustomCars {
             return;
         }
 
-        SableMobInteractions.LOGGER.info("Scanning custom cars in {} for tiers {}", root.toAbsolutePath().normalize(), tierIds);
+        installDefaults(root, tierIds);
+        SableMobInteractions.LOGGER.debug("Scanning custom cars in {} for tiers {}", root.toAbsolutePath().normalize(), tierIds);
         Map<ResourceLocation, CompoundTag> loaded = new HashMap<>();
         Map<String, List<ResourceLocation>> folders = new HashMap<>();
 
@@ -155,7 +165,7 @@ public final class CustomCars {
             known.add(tierId.getPath().replaceFirst("^tier_\\d+_", "").toLowerCase(Locale.ROOT));
         }
         for (Map.Entry<String, List<ResourceLocation>> entry : folders.entrySet()) {
-            SableMobInteractions.LOGGER.info("Custom cars in folder '{}': {}", entry.getKey(), entry.getValue().size());
+            SableMobInteractions.LOGGER.debug("Custom cars in folder '{}': {}", entry.getKey(), entry.getValue().size());
             if (!known.contains(entry.getKey())) {
                 SableMobInteractions.LOGGER.warn("Custom car folder '{}' does not match any tier, its cars will never spawn", entry.getKey());
             }
@@ -163,5 +173,82 @@ public final class CustomCars {
         cars = Map.copyOf(loaded);
         byFolder = Map.copyOf(folders);
         SableMobInteractions.LOGGER.info("Loaded {} custom car(s) from {}", loaded.size(), root);
+    }
+
+    private static void installDefaults(Path root, Iterable<ResourceLocation> tierIds) {
+        Path marker = root.resolve(DEFAULTS_MARKER);
+        if (Files.exists(marker)) {
+            return;
+        }
+
+        List<String> entries = new ArrayList<>();
+        try (InputStream stream = CustomCars.class.getResourceAsStream(DEFAULTS_ROOT + "index.txt")) {
+            if (stream == null) {
+                return;
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {
+                        entries.add(line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            SableMobInteractions.LOGGER.warn("Could not read the default car list", e);
+            return;
+        }
+
+        Set<String> emptyFolders = new HashSet<>();
+        for (ResourceLocation tierId : tierIds) {
+            Path dir = root.resolve(folderName(tierId));
+            if (!containsNbt(dir)) {
+                emptyFolders.add(folderName(tierId));
+            }
+        }
+
+        int installed = 0;
+        for (String entry : entries) {
+            int slash = entry.indexOf('/');
+            if (slash <= 0 || slash == entry.length() - 1) {
+                continue;
+            }
+            String folder = entry.substring(0, slash);
+            String file = entry.substring(slash + 1);
+            if (!emptyFolders.contains(folder)) {
+                continue;
+            }
+            try (InputStream stream = CustomCars.class.getResourceAsStream(DEFAULTS_ROOT + entry)) {
+                if (stream == null) {
+                    SableMobInteractions.LOGGER.warn("Default car {} is listed but missing from the mod", entry);
+                    continue;
+                }
+                Files.copy(stream, root.resolve(folder).resolve(file), StandardCopyOption.REPLACE_EXISTING);
+                installed++;
+            } catch (IOException e) {
+                SableMobInteractions.LOGGER.warn("Could not install default car {}", entry, e);
+            }
+        }
+
+        try {
+            Files.writeString(marker, "");
+        } catch (IOException e) {
+            SableMobInteractions.LOGGER.warn("Could not write {}", marker, e);
+        }
+        if (installed > 0) {
+            SableMobInteractions.LOGGER.info("Installed {} default car(s) into {}", installed, root);
+        }
+    }
+
+    private static boolean containsNbt(Path dir) {
+        if (!Files.isDirectory(dir)) {
+            return false;
+        }
+        try (Stream<Path> files = Files.list(dir)) {
+            return files.anyMatch(file -> file.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".nbt"));
+        } catch (IOException e) {
+            return true;
+        }
     }
 }

@@ -1,12 +1,18 @@
 package com.eviesaurr.sablemobinteractions.worldgen.vehicle.nodes;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.neoforged.neoforge.common.Tags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -21,6 +27,24 @@ public class VehicleNodePadPiece extends StructurePiece {
     private static final int FOUNDATION_DEPTH = 14;
     private static final double WOBBLE = 0.28;
     private static final double PLATEAU = 0.65;
+
+    private static final class Palette {
+        final BlockState plateau;
+        final BlockState slopeTop;
+        final BlockState fill;
+
+        Palette(Block plateau, Block slopeTop, Block fill) {
+            this.plateau = plateau.defaultBlockState();
+            this.slopeTop = slopeTop.defaultBlockState();
+            this.fill = fill.defaultBlockState();
+        }
+    }
+
+    private static final Palette DEFAULT_PALETTE = new Palette(Blocks.COARSE_DIRT, Blocks.GRASS_BLOCK, Blocks.DIRT);
+    private static final Palette DESERT_PALETTE = new Palette(Blocks.SMOOTH_SANDSTONE, Blocks.SAND, Blocks.SANDSTONE);
+    private static final Palette BADLANDS_PALETTE = new Palette(Blocks.PACKED_MUD, Blocks.RED_SAND, Blocks.TERRACOTTA);
+    private static final Palette SNOW_PALETTE = new Palette(Blocks.COARSE_DIRT, Blocks.SNOW_BLOCK, Blocks.DIRT);
+    private static final Palette STONY_PALETTE = new Palette(Blocks.GRAVEL, Blocks.GRAVEL, Blocks.STONE);
 
     private final int padY;
     private final int centerX;
@@ -63,6 +87,23 @@ public class VehicleNodePadPiece extends StructurePiece {
         return (h & 0xFFFF) / 65535.0 * Math.PI * 2;
     }
 
+    private static Palette paletteFor(WorldGenLevel level, BlockPos pos) {
+        Holder<Biome> biome = level.getBiome(pos);
+        if (biome.is(BiomeTags.IS_BADLANDS)) {
+            return BADLANDS_PALETTE;
+        }
+        if (biome.is(Tags.Biomes.IS_DESERT)) {
+            return DESERT_PALETTE;
+        }
+        if (biome.is(Tags.Biomes.IS_SNOWY)) {
+            return SNOW_PALETTE;
+        }
+        if (biome.is(Biomes.STONY_SHORE)) {
+            return STONY_PALETTE;
+        }
+        return DEFAULT_PALETTE;
+    }
+
     @Override
     protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
         tag.putInt("PadY", padY);
@@ -80,9 +121,7 @@ public class VehicleNodePadPiece extends StructurePiece {
         int maxZ = Math.min(boundingBox.maxZ(), box.maxZ());
         int ceiling = level.getMaxBuildHeight() - 1;
         BlockState air = Blocks.AIR.defaultBlockState();
-        BlockState plateau = Blocks.COARSE_DIRT.defaultBlockState();
-        BlockState slopeTop = Blocks.GRASS_BLOCK.defaultBlockState();
-        BlockState dirt = Blocks.DIRT.defaultBlockState();
+        Palette palette = paletteFor(level, new BlockPos(centerX, padY, centerZ));
 
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
@@ -116,12 +155,12 @@ public class VehicleNodePadPiece extends StructurePiece {
                         level.setBlock(p, air, 2);
                     }
                 }
-                level.setBlock(new BlockPos(x, target, z), onPlateau ? plateau : slopeTop, 2);
+                level.setBlock(new BlockPos(x, target, z), onPlateau ? palette.plateau : palette.slopeTop, 2);
                 for (int depth = 1; depth <= FOUNDATION_DEPTH; depth++) {
                     BlockPos below = new BlockPos(x, target - depth, z);
                     BlockState state = level.getBlockState(below);
                     if (state.isAir() || !state.getFluidState().isEmpty() || state.canBeReplaced()) {
-                        level.setBlock(below, dirt, 2);
+                        level.setBlock(below, palette.fill, 2);
                     } else {
                         break;
                     }

@@ -1,0 +1,1 @@
+tier_1_scrap/scrappy_default_car.nbt
