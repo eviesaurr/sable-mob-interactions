@@ -75,9 +75,10 @@ public interface SubLevelAttacker {
 Any mob implementing this interface is picked up automatically, no registration needed on your end.
 
 ---
-
-## Requires
-
-- [**Sable**](https://modrinth.com/mod/sable) (required)
-
-Everything else is optional. Create, Create Aeronautics, Create Submarine, and Create: Big Cannons are only used to enhance specific behaviors when present, and the mod works fully without them.
+Requires
+Sable (required)
+SableCat 1.0.3 or newer (required, it provides the lag fix and vehicle cleanup this mod depends on)
+Create (required, cars use Create seats)
+Simulated (required, the physics assembler that turns spawned cars into sub-levels)
+Create Connected (required, the built-in car uses its gearbox)
+Offroad (required, the built-in car uses its tires)
