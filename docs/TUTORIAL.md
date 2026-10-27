@@ -27,8 +27,13 @@ Get a Mob Transmitter and place it on your car so the seat faces the front of th
 Put Redstone Links on the parts that control movement:
 
 - **Forward**: whatever makes the car drive forward
+![Links on bottom](images/RedstoneLinksDriveBottom.png)
 - **Backward**: whatever makes it reverse
+![Links on top](images/RedstoneLinksDriveTop.png)
 - **Left and right**: whatever turns the car
+![Links on front](images/RedstoneLinksFrontView.png)
+( **Note here** the configuration of the frequencies for turning left and right, on the backside of each wheel mount the Redstone Link configuration
+is reversed. This is the same for driving forwards and backwards.) 
 
 Setting a frequency for each Redstone Link to ensure each channel has a dedicated frequency is important, but the specific configuration isn't. This is because SMI uses these as a template 
 and randomises each block in the frequency channel when a vehicle spawns into the world. This allows you to have multiple of the same vehicle UUID, all driving independently.
