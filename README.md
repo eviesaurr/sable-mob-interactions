@@ -1,7 +1,7 @@
 # Sable Mob Interactions
 ### *Give Any Mob a Reason to Attack Your Ships*
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/eviesaurr/sable-mob-interactions)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/eviesaurr/sable-mob-interactions)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green.svg)](https://minecraft.net)
 [![NeoForge](https://img.shields.io/badge/NeoForge-21.1-purple.svg)](https://neoforged.net)
 [![Sable](https://img.shields.io/badge/Sable-required-red.svg)](https://modrinth.com/mod/sable)
