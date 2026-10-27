@@ -32,8 +32,6 @@ Put Redstone Links on the parts that control movement:
 
 On the default car these sit on the gearboxes and steering mechanism, with each link placed on the part it controls.
 
-![Links on the drive mechanisms](images/02-bind-wide.png)
-
 ## Step 3: Bind a Redstone Controller
 
 Take a Redstone Controller, enter bind mode, and point it at each link in turn. When the "Bind mode active" message appears, press the key you want that link to answer to. The usual layout is:
@@ -45,6 +43,7 @@ Take a Redstone Controller, enter bind mode, and point it at each link in turn. 
 
 Repeat for every link until all four directions are bound. Then test the car yourself with the controller to check it drives the way you expect.
 
+![Links on the drive mechanisms](images/02-bind-wide.png)
 ![Binding a link](images/03-bind-underside.png)
 ![Binding the next link](images/03-bind-second-link.png)
 ![Binding the last link](images/03-bind-third-link.png)
