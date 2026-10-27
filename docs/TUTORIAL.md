@@ -30,6 +30,9 @@ Put Redstone Links on the parts that control movement:
 - **Backward**: whatever makes it reverse
 - **Left and right**: whatever turns the car
 
+Setting a frequency for each Redstone Link to ensure each channel has a dedicated frequency is important, but the specific configuration isn't. This is because SMI uses these as a template 
+and randomises each block in the frequency channel when a vehicle spawns into the world. This allows you to have multiple of the same vehicle UUID, all driving independently.
+
 On the default car these sit on the gearboxes and steering mechanism, with each link placed on the part it controls.
 
 ## Step 3: Bind a Redstone Controller
