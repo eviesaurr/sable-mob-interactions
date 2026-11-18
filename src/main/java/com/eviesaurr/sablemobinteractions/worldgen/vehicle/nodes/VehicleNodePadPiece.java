@@ -2,6 +2,7 @@ package com.eviesaurr.sablemobinteractions.worldgen.vehicle.nodes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -88,7 +89,7 @@ public class VehicleNodePadPiece extends StructurePiece {
     }
 
     private static Palette paletteFor(WorldGenLevel level, BlockPos pos) {
-        Holder<Biome> biome = level.getBiome(pos);
+        Holder<Biome> biome = level.getUncachedNoiseBiome(QuartPos.fromBlock(pos.getX()), QuartPos.fromBlock(pos.getY()), QuartPos.fromBlock(pos.getZ()));
         if (biome.is(BiomeTags.IS_BADLANDS)) {
             return BADLANDS_PALETTE;
         }
